@@ -43,8 +43,7 @@ public class AudioPlayer {
     public void gotoChoice(int c) 
             throws IOException, LineUnavailableException, UnsupportedAudioFileException  
     { 
-        switch (c)  
-        { 
+        switch (c) { 
             case 1: 
                 pause(); 
                 break; 
@@ -54,19 +53,19 @@ public class AudioPlayer {
             case 3: 
                 restart(); 
                 break; 
-            case 4: 
+            case 4:
+                skip(); //goes to previous song
+            case 5: 
                 skip(); 
                 break; 
-            case 5: 
+            case 6: 
                 System.out.println("Enter time (" + 0 +  
                 ", " + clip.getMicrosecondLength() + ")"); 
                 Scanner sc = new Scanner(System.in); 
                 long c1 = sc.nextLong(); 
                 jump(c1); 
                 break; 
-      
         } 
-      
     } 
 
     public void play()  
@@ -121,9 +120,11 @@ public class AudioPlayer {
     public void skip() throws UnsupportedAudioFileException, 
     IOException, LineUnavailableException  
     { 
-        currentFrame = 0L; 
         clip.stop(); 
         clip.close(); 
+        resetAudioStream(); 
+        currentFrame = 0L; 
+        clip.setMicrosecondPosition(0);
     } 
 
     public void jump(long c) throws UnsupportedAudioFileException, IOException, 
@@ -152,16 +153,6 @@ public class AudioPlayer {
 /**********************************************************************************************
 *    END OF CITED CODE
 **********************************************************************************************/
-
-    public Boolean songNotDone(long currentFrame) {
-        if (currentFrame == clip.getMicrosecondLength()) {
-            currentFrame = 0L; 
-            clip.stop(); 
-            clip.close();
-            return false;
-        }
-        return true;
-    } 
 
     public long getPostion() {
         return clip.getMicrosecondPosition();

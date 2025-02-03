@@ -34,8 +34,7 @@ public class Playlist{
     }
 
     public void playthrough() {
-        try
-        { 
+        try { 
             for (int i = 0; i < songs.length; i++) {
                 AudioPlayer currentSong = songs[i]; 
                 
@@ -46,24 +45,24 @@ public class Playlist{
                 while (currentSong.getLength() != currentSong.getPostion()) { 
                     System.out.println("1. pause"); 
                     System.out.println("2. resume"); 
-                    System.out.println("3. restart"); 
-                    System.out.println("4. skip"); 
-                    System.out.println("5. Jump to specific time"); 
+                    System.out.println("3. restart");
+                    System.out.println("4. previous"); 
+                    System.out.println("5. skip"); 
+                    System.out.println("6. Jump to specific time"); 
                     choice = input.nextLine();
                     int c = Integer.parseInt(choice); 
                     currentSong.gotoChoice(c); 
-                    if (c == 4) {   
+                    if (c == 4) { 
+                        i -= 2;  
                         break; 
+                    } else if(c == 5) {
+                        break;
                     }
                 }
             }
-        }  
-          
-        catch (Exception ex)  
-        { 
+        } catch (Exception ex)  { 
             System.out.println("Error with playing sound."); 
             ex.printStackTrace(); 
-          
-          } 
+        } 
     }
 }
