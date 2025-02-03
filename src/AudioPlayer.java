@@ -38,7 +38,6 @@ public class AudioPlayer {
 
         clip.open(audioInputStream);
 
-        //clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void gotoChoice(int c) 
@@ -56,7 +55,7 @@ public class AudioPlayer {
                 restart(); 
                 break; 
             case 4: 
-                stop(); 
+                skip(); 
                 break; 
             case 5: 
                 System.out.println("Enter time (" + 0 +  
@@ -119,7 +118,7 @@ public class AudioPlayer {
     } 
       
     // Method to stop the audio 
-    public void stop() throws UnsupportedAudioFileException, 
+    public void skip() throws UnsupportedAudioFileException, 
     IOException, LineUnavailableException  
     { 
         currentFrame = 0L; 
@@ -148,6 +147,27 @@ public class AudioPlayer {
         audioInputStream = AudioSystem.getAudioInputStream( 
         new File(filePath).getAbsoluteFile()); 
         clip.open(audioInputStream); 
-        clip.loop(Clip.LOOP_CONTINUOUSLY); 
     } 
+
+/**********************************************************************************************
+*    END OF CITED CODE
+**********************************************************************************************/
+
+    public Boolean songNotDone(long currentFrame) {
+        if (currentFrame == clip.getMicrosecondLength()) {
+            currentFrame = 0L; 
+            clip.stop(); 
+            clip.close();
+            return false;
+        }
+        return true;
+    } 
+
+    public long getPostion() {
+        return clip.getMicrosecondPosition();
+    }
+
+    public long getLength() {
+        return clip.getMicrosecondLength();
+    }
 }
