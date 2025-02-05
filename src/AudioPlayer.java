@@ -27,9 +27,8 @@ public class AudioPlayer {
     private String filePath;
 
     public AudioPlayer(String filePath)
-        throws UnsupportedAudioFileException,
-        IOException, LineUnavailableException
-    {
+        throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+
         this.filePath = filePath;
 
         audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
@@ -37,12 +36,10 @@ public class AudioPlayer {
         clip = AudioSystem.getClip();
 
         clip.open(audioInputStream);
-
     }
 
     public void gotoChoice(int c) 
-            throws IOException, LineUnavailableException, UnsupportedAudioFileException  
-    { 
+            throws IOException, LineUnavailableException, UnsupportedAudioFileException { 
         switch (c) { 
             case 1: 
                 pause(); 
@@ -54,7 +51,8 @@ public class AudioPlayer {
                 restart(); 
                 break; 
             case 4:
-                skip(); //goes to previous song
+                skip(); //added previous option
+                break;
             case 5: 
                 skip(); 
                 break; 
@@ -70,13 +68,11 @@ public class AudioPlayer {
 
     public void play()  
     { 
-        //start the clip 
         clip.start(); 
           
         status = "play"; 
     } 
-      
-    // Method to pause the audio 
+       
     public void pause()  
     { 
         if (status.equals("paused"))  
@@ -90,9 +86,8 @@ public class AudioPlayer {
         status = "paused"; 
     } 
 
-    public void resumeAudio() throws UnsupportedAudioFileException, 
-                                IOException, LineUnavailableException  
-    { 
+    public void resumeAudio() 
+    throws UnsupportedAudioFileException, IOException, LineUnavailableException { 
         if (status.equals("play"))  
         { 
             System.out.println("Audio is already "+ 
@@ -105,9 +100,8 @@ public class AudioPlayer {
         this.play(); 
     } 
 
-    public void restart() throws IOException, LineUnavailableException, 
-                                            UnsupportedAudioFileException  
-    { 
+    public void restart() 
+    throws IOException, LineUnavailableException, UnsupportedAudioFileException { 
         clip.stop(); 
         clip.close(); 
         resetAudioStream(); 
@@ -116,10 +110,14 @@ public class AudioPlayer {
         this.play(); 
     } 
       
-    // Method to stop the audio 
-    public void skip() throws UnsupportedAudioFileException, 
-    IOException, LineUnavailableException  
-    { 
+    public void skip() 
+        throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        if (status.equals("paused")) {
+            clip.close(); 
+            resetAudioStream(); 
+            clip.setMicrosecondPosition(currentFrame); 
+            this.play(); 
+        } 
         clip.stop(); 
         clip.close(); 
         resetAudioStream(); 
@@ -127,9 +125,8 @@ public class AudioPlayer {
         clip.setMicrosecondPosition(0);
     } 
 
-    public void jump(long c) throws UnsupportedAudioFileException, IOException, 
-                                                        LineUnavailableException  
-    { 
+    public void jump(long c) 
+        throws UnsupportedAudioFileException, IOException, LineUnavailableException { 
         if (c > 0 && c < clip.getMicrosecondLength())  
         { 
             clip.stop(); 
@@ -141,10 +138,8 @@ public class AudioPlayer {
         } 
     } 
       
-    // Method to reset audio stream 
-    public void resetAudioStream() throws UnsupportedAudioFileException, IOException, 
-                                            LineUnavailableException  
-    { 
+    public void resetAudioStream() 
+        throws UnsupportedAudioFileException, IOException, LineUnavailableException { 
         audioInputStream = AudioSystem.getAudioInputStream( 
         new File(filePath).getAbsoluteFile()); 
         clip.open(audioInputStream); 
@@ -154,11 +149,29 @@ public class AudioPlayer {
 *    END OF CITED CODE
 **********************************************************************************************/
 
+    public int getChoice() 
+        throws IOException, LineUnavailableException, UnsupportedAudioFileException{ 
+
+        System.out.println("1. pause"); 
+        System.out.println("2. resume"); 
+        System.out.println("3. restart");
+        System.out.println("4. previous"); 
+        System.out.println("5. skip"); 
+        System.out.println("6. Jump to specific time");
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+        return choice;
+    }
+
     public long getPostion() {
         return clip.getMicrosecondPosition();
     }
 
     public long getLength() {
         return clip.getMicrosecondLength();
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
