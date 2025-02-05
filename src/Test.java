@@ -12,7 +12,7 @@ public class Test {
         //runs python script to convert any MP3 files to WAV
         String command ="py C:\\Users\\julia\\OneDrive\\Desktop\\Coding_Projects\\CS240\\L3\\Playlist\\src\\mp3Convert.py";
         Process process = Runtime.getRuntime().exec(command);
-
+        //will output of the script to the console
         InputStreamReader reader = new InputStreamReader((process.getInputStream()));
         BufferedReader buffer = new BufferedReader((reader));
         String line;
